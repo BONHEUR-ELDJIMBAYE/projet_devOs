@@ -5,10 +5,17 @@ uint16_t *scr_tab;
 static int cursor_x = 0;
 static int cursor_y = 0;
 
+
+void clear_screen() { //pour effacer ce qui s'affiche par defaut sur l'ecran
+    for (int i = 0; i < VGA_WIDTH * VGA_HEIGHT; i++) {
+            scr_tab[i] = (CHAR_COLOR << 8) | ' ';
+        }
+}
 void init_console() {
     scr_tab= (uint16_t *) SCREEN_ADDR;
     cursor_x = 0;
     cursor_y = 0;
+    clear_screen();
     console_cursor(cursor_x, cursor_y);
 }
 
@@ -28,6 +35,10 @@ void console_putchar(const char c) {
         int pos = cursor_y * VGA_WIDTH + cursor_x;
         scr_tab[pos] = (CHAR_COLOR << 8) | c;
         cursor_x++;
+        if (cursor_x > VGA_WIDTH) { // revenir à la suivante quand on atteint la colonne max de l'écran
+            cursor_x = 0;
+            cursor_y++;
+        }
     } else if (c == 8) {// pour deplacer le curceur d'une colonne en arrière
 
         if (cursor_x > 0) cursor_x--;
