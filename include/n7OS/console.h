@@ -31,6 +31,8 @@
 #define YELLOW  0xE
 #define WHITE   0xF
 
+
+
 // Character color: blink|back|text
 #define BLINK   (0<<7)
 #define BACK    (BLACK<<4)

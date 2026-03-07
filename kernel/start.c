@@ -7,7 +7,7 @@
 void kernel_start(void)
 {
     init_console();
-    printf("Hello world!kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk\n");
+    printf("Hello world!");
    
     setup_base(0 /* la memoire virtuelle n'est pas encore definie */);
 
