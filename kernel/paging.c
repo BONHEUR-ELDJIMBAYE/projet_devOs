@@ -1,5 +1,5 @@
 #include <n7OS/paging.h>
-#include <stddef.h> // nécessaire pour NULL
+#include <stddef.h> 
 
 void initialise_paging() {
 
