@@ -9,6 +9,12 @@
 #include <inttypes.h>
 
 /**
+ * on calcule le nombre de pages de la mémoire physique
+ */
+
+#define NB_PAGES (LAST_MEMORY_INDEX + 1) / PAGE_SIZE 
+
+/**
  * @brief Adresse de la dernière ligne adressable de la mémoire
  * 
  * On considère ici une mémoire de 16Mo

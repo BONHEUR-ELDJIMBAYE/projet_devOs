@@ -31,10 +31,12 @@
 #define YELLOW  0xE
 #define WHITE   0xF
 
+
+
 // Character color: blink|back|text
 #define BLINK   (0<<7)
 #define BACK    (BLACK<<4)
-#define TEXT    WHITE 
+#define TEXT    GREEN 
 #define CHAR_COLOR (BLINK|BACK|TEXT)
 
 void init_console();
