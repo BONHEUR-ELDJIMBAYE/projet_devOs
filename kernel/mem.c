@@ -1,10 +1,7 @@
 #include <n7OS/mem.h>
 #include <stdio.h>
 
-/**
- * on calcule le nombre de pages de la mémoire physique
- */
-#define NB_PAGES (LAST_MEMORY_INDEX + 1) / PAGE_SIZE 
+
 
 /**
  * initialisation du tableau bitmap
