@@ -11,22 +11,22 @@
  * @brief Description d'une ligne dans le repertoire de page
  * 
  */
-typedef struct {
-    uint32_t P             : 1; //table de page présente en mémoire
-    uint32_t W             : 1; // table de page accessible en lecture/écriture (0 : lecture seule)
-    uint32_t U             : 1; //page utilisateur; U = 0 : page en mode noyau
-    uint32_t RESERVE       : 9; //reserve
-    uint32_t PAGE_ADRESS  : 20; //adresse de la page en mémoire 
-} page_directory_entry_t;
+    typedef struct {
+        uint32_t P             : 1; //table de page présente en mémoire
+        uint32_t W             : 1; // table de page accessible en lecture/écriture (0 : lecture seule)
+        uint32_t U             : 1; //page utilisateur; U = 0 : page en mode noyau
+        uint32_t RESERVE       : 9; //reserve
+        uint32_t PAGE_ADRESS  : 20; //adresse de la page en mémoire 
+    } page_directory_entry_t;
 
-/**
- * @brief Une entrée dans le repertoire de page peut être manipulée en utilisant
- *        la structure page_directory_entry_t ou directement la valeur
- */
-typedef union {
-    page_directory_entry_t directory_entry;
-    uint32_t value;
-} DTE; // DTE = Directory Table Entry 
+    /**
+     * @brief Une entrée dans le repertoire de page peut être manipulée en utilisant
+     *        la structure page_directory_entry_t ou directement la valeur
+     */
+    typedef union {
+        page_directory_entry_t directory_entry;
+        uint32_t value;
+    } DTE; // DTE = Directory Table Entry 
 
 
 /**
@@ -79,14 +79,14 @@ typedef struct {
     uint32_t I_TABLE      : 10; // indice de table
     uint32_t I_DIR        : 10; // indice de repertoire de page
    
-} adresse_virtuel_t;
+} addresse_virtuel_t;
 
 /**
  * @brief ue adresse virtuel peut-être utilisée en utilisant la structure de adresse_virtuel_t ou
  * directement la valeur
  */
 typedef union{
-    adresse_virtuel_t adresse_virtuel;
+    addresse_virtuel_t addresse_virtuel;
     uint32_t value;
 } AV; //AV = adresse virtuelle
 

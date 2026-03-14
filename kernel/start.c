@@ -6,6 +6,9 @@
 
 void kernel_start(void)
 {
+    //initialisation de la pagination
+    initialise_paging();
+    // initialisation de la console
     init_console();
     printf("Hello world!");
    
