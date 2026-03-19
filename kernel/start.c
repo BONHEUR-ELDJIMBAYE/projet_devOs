@@ -7,12 +7,13 @@
 void kernel_start(void)
 {
     //initialisation de la pagination
-    initialise_paging();
+    
     // initialisation de la console
+    initialise_paging();
     init_console();
     printf("Hello world!");
    
-    setup_base(0 /* la memoire virtuelle n'est pas encore definie */);
+    // setup_base(0 /* la memoire virtuelle n'est pas encore definie */);
 
     // lancement des interruptions
     sti();
