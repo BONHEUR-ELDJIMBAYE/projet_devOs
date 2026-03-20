@@ -11,29 +11,29 @@
  * @brief Description d'une ligne dans le repertoire de page
  * 
  */
-    typedef struct {
-        uint32_t P             : 1; //table de page présente en mémoire
-        uint32_t W             : 1; // table de page accessible en lecture/écriture (0 : lecture seule)
-        uint32_t U             : 1; //page utilisateur; U = 0 : page en mode noyau
-        uint32_t RESERVE       : 9; //reserve
-        uint32_t PAGE_ADRESS  : 20; //adresse de la page en mémoire 
-    } page_directory_entry_t;
+typedef struct {
+    uint32_t P             : 1; //table de page présente en mémoire
+    uint32_t W             : 1; // table de page accessible en lecture/écriture (0 : lecture seule)
+    uint32_t U             : 1; //page utilisateur; U = 0 : page en mode noyau
+    uint32_t RESERVE       : 9; //reserve
+    uint32_t PAGE_ADRESS  : 20; //adresse de la page en mémoire 
+} page_directory_entry_t;
 
-    /**
-     * @brief Une entrée dans le repertoire de page peut être manipulée en utilisant
-     *        la structure page_directory_entry_t ou directement la valeur
-     */
-    typedef union {
-        page_directory_entry_t directory_entry;
-        uint32_t value;
-    } DTE; // DTE = Directory Table Entry 
+/**
+ * @brief Une entrée dans le repertoire de page peut être manipulée en utilisant
+ *        la structure page_directory_entry_t ou directement la valeur
+ */
+typedef union {
+    page_directory_entry_t directory_entry;
+    uint32_t value;
+} DTE; // DTE = Directory Table Entry 
 
 
 /**
  * @brief Un repertoire de page est un tableau de descripteurs de page
  * 
  */
-typedef DTE * DirectoryTable;
+typedef DTE *DirectoryTable;
 
 /**
  * @brief Description d'une ligne dans la table de page
@@ -66,7 +66,7 @@ typedef union {
  * @brief Une table de page (PageTable) est un tableau de descripteurs de page
  * 
  */
-typedef PTE * PageTable;
+typedef PTE *PageTable;
 
 
 
