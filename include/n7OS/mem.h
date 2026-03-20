@@ -9,59 +9,74 @@
 #include <inttypes.h>
 
 /**
- * on calcule le nombre de pages de la mémoire physique
- */
-
-#define NB_PAGES (LAST_MEMORY_INDEX + 1) / PAGE_SIZE 
-
-/**
  * @brief Adresse de la dernière ligne adressable de la mémoire
- * 
+ *
  * On considère ici une mémoire de 16Mo
  */
-#define LAST_MEMORY_INDEX 0XFFFFFF 
+#define LAST_MEMORY_INDEX 0xFFFFFF
 
 /**
- * @brief Taille d'une page en mémoire
- * 
+ * @brief Taille d'une page en octets
+ *
  * Ici, 0x1000 -> 2^10 * 4 = 4096 octets
  */
 #define PAGE_SIZE 0x1000
 
 /**
+ * @brief la taille occupé par le code du noyau PAGE_SIZE * 1025 = 0x401000
+ * on compte les tables de pages et le repertoire de page
+ */
+#define KERNEL_STACK_SIZE 0x401000
+
+/**
+ * @brief Taille d'une page en bits
+ */
+#define PAGE_SIZE_BITS PAGE_SIZE * 8
+
+/**
+ * @brief Nombre de pages dans la mémoire
+ */
+#define PAGE_COUNT (LAST_MEMORY_INDEX + 1) / PAGE_SIZE
+
+/**
+ * @brief Taille du tableau de bitmap contenant l'état des pages
+ */
+#define BITMAP_ARRAY_SIZE PAGE_COUNT / 32
+
+/**
  * @brief Marque la page allouée
- * 
+ *
  * Lorsque la page a été choisie, cette fonction permet de la marquer allouée
- * 
+ *
  * @param addr Adresse de la page à allouer
  */
 void setPage(uint32_t addr);
 
 /**
  * @brief Désalloue la page
- * 
+ *
  * Libère la page allouée.
- * 
+ *
  * @param addr Adresse de la page à libérer
  */
 void clearPage(uint32_t addr);
 
 /**
  * @brief Fourni la première page libre de la mémoire physique tout en l'allouant
- * 
+ *
  * @return uint32_t Adresse de la page sélectionnée
  */
 uint32_t findfreePage();
 
 /**
  * @brief Initialise le gestionnaire de mémoire physique
- * 
+ *
  */
 void init_mem();
 
 /**
  * @brief Affiche l'état de la mémoire physique
- * 
+ *
  */
 void print_mem();
 #endif

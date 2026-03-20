@@ -6,10 +6,15 @@
 
 void kernel_start(void)
 {
+    //initialisation de la pagination
+    
+    // initialisation de la console
     init_console();
+    init_kheap();
+    initialise_paging();
+
     printf("Hello world!");
    
-    setup_base(0 /* la memoire virtuelle n'est pas encore definie */);
 
     // lancement des interruptions
     sti();
