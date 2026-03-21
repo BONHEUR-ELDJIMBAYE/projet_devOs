@@ -12,10 +12,7 @@ void init_kheap()
 	placement_address = (uint32_t)&mem_heap;
 }
 
-uint32_t get_stack_top()
-{
-	return placement_address;
-}
+
 
 uint32_t kmalloc_int(uint32_t sz, int align, uint32_t *phys) {
     uint32_t address;

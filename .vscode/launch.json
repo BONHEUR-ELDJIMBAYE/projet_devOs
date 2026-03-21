@@ -16,7 +16,7 @@
 			// },
 			"targetArchitecture": "x86",
 			"MIMode": "gdb",
-			"miDebuggerPath": "",
+			"miDebuggerPath": "gdb",
 			"miDebuggerArgs": "",
 			"customLaunchSetupCommands": [
 				{
@@ -29,10 +29,6 @@
 					"description": "Enable pretty-printing for gdb",
 					"text": "-enable-pretty-printing",
 					"ignoreFailures": true
-				},
-				{
-					"text": "file ${workspaceRoot}/kernel.bin",
-					"description": "Load binary."
 				},
 				{
 					"text": "break isr_handler",
