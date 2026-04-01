@@ -4,18 +4,28 @@
 #include <n7OS/console.h>
 #include <stdio.h>
 
+extern void handler_IT50(void);
+
 void kernel_start(void)
 {
-    //initialisation de la pagination
     
-    // initialisation de la console
     init_console();
     init_kheap();
     initialise_paging();
 
-    printf("Hello world!");
+    printf("Hello world!\n");
    
+    //teste de la pagination
+    // alloc_page_entry(0xA0000000,1,0); 
+    // uint32_t *ptr = (uint32_t *) 0xA0000000;
+    // (*ptr)++;
 
+    //initialisation de l'entrée 50 de la table des interruptions
+    init_irq_entry(50, (uint32_t) handler_IT50);   
+
+    //teste de l'interruption 50
+    __asm__("int $50"::);
+    
     // lancement des interruptions
     sti();
 
