@@ -17,6 +17,7 @@ Bit :     | 31              16 | 15              0 |
 Contenu : |sélecteur de segment| offset inférieur  |
 */
 
+
 typedef struct {
   uint16_t offset_inf;
   uint16_t sel_segment;
