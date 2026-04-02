@@ -32,7 +32,7 @@ void kernel_start(void)
     
     // lancement des interruptions
     sti();
-    shutdown(1);
+    // shutdown(1);
     
     // if ( exemple() == 1 ) {
     //     printf("exemple ok");
