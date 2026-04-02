@@ -2,19 +2,25 @@
 #include <inttypes.h>
 #include <n7OS/processor_structs.h>
 #include <n7OS/console.h>
+#include <n7OS/timer.h>
+#include <n7OS/irq.h>
 #include <stdio.h>
 
 extern void handler_IT50(void);
 
+int heure = 0;
+int minute = 0;
+int seconde = 0;
+
 void kernel_start(void)
 {
-    
+    init_timer();
     init_console();
     init_kheap();
     initialise_paging();
 
-    printf("Hello world!\n");
-   
+    convert_counter_to_time(&heure, &minute, &seconde);
+    printf("%02d:%02d:%02d", heure, minute, seconde);
     //teste de la pagination
     // alloc_page_entry(0xA0000000,1,0); 
     // uint32_t *ptr = (uint32_t *) 0xA0000000;
