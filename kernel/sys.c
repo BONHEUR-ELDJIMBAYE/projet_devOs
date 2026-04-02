@@ -25,7 +25,7 @@ int sys_example() {
 
 int sys_shutdown(int n) {
   if (n == 1) {
-    // outw(0x2000, 0x604);
+    outw(0x2000, 0x604);
     return 1;
   } else
     return n;
