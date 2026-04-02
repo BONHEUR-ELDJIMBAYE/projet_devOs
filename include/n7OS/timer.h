@@ -23,6 +23,6 @@ void handler_timer();
 /**
  * @brief conversion du compteur au format hh:mm:ss
  */
-void convert_counter_to_time();
+void convert_counter_to_time(int *hours, int *minutes, int *seconds);
 
 #endif
