@@ -19,13 +19,23 @@ void init_timer() {
 void handler_timer() {
     outb(0x20, 0x20); // ack de l’IT du PIC Master
     timer_counter++;
+    display_time();
 
 }
 
 void convert_counter_to_time(int *hours, int *minutes, int *seconds) {
-    *hours = timer_counter / 3600;
-    printf("heures : %d\n", *hours);
-    *minutes = (timer_counter % 3600) / 60;
-    *seconds = timer_counter % 60;
+
+    uint32_t seconde_total = timer_counter / 1000;
+
+    *hours = seconde_total / 3600;
+    *minutes = (seconde_total % 3600) / 60;
+    *seconds = seconde_total % 60;
+
+}
+
+void display_time() {
+    int heure, minute, seconde;
+    convert_counter_to_time(&heure, &minute, &seconde);
+    printf("%02d:%02d:%02d", heure, minute, seconde);
 
 }
