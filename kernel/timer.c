@@ -54,8 +54,4 @@ void display_time() {
     temps[6] = '0' + seconde / 10;
     temps[7] =  '0' + seconde % 10;  
     console_timer(temps, 8);
-
-    
-
-
 }

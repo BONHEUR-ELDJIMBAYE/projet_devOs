@@ -5,6 +5,7 @@
 #include <n7OS/timer.h>
 #include <n7OS/irq.h>
 #include <stdio.h>
+#include <unistd.h>
 
 extern void handler_IT50(void);
 
@@ -16,7 +17,9 @@ void kernel_start(void)
     initialise_paging();
     init_timer();
     
-    
+    init_syscall();
+    printf("teste");
+
     //teste de la pagination
     // alloc_page_entry(0xA0000000,1,0); 
     // uint32_t *ptr = (uint32_t *) 0xA0000000;
@@ -29,6 +32,11 @@ void kernel_start(void)
     
     // lancement des interruptions
     sti();
+    shutdown(1);
+    
+    // if ( exemple() == 1 ) {
+    //     printf("exemple ok");
+    // }
 
     // on ne doit jamais sortir de kernel_start
     while (1) {
