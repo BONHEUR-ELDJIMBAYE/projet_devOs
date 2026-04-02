@@ -1,6 +1,9 @@
 #include <n7OS/cpu.h>
 #include <inttypes.h>
 #include <n7OS/timer.h>
+#include <n7OS/console.h>
+#include <stdio.h>
+
 
 extern void handler_IT_timer(void);
 uint32_t timer_counter = 0;
@@ -19,7 +22,10 @@ void init_timer() {
 void handler_timer() {
     outb(0x20, 0x20); // ack de l’IT du PIC Master
     timer_counter++;
-    display_time();
+    if (timer_counter % 1000 == 0) {
+        display_time();
+    }
+    
 
 }
 
@@ -36,6 +42,20 @@ void convert_counter_to_time(int *hours, int *minutes, int *seconds) {
 void display_time() {
     int heure, minute, seconde;
     convert_counter_to_time(&heure, &minute, &seconde);
-    printf("%02d:%02d:%02d", heure, minute, seconde);
+    
+    //constuction de la chaine pour afficher hh:mm:ss
+    char temps[8];
+    temps[0] = '0' + heure / 10 ;
+    temps[1] = '0' + heure % 10 ;
+    temps[2] = ':'; 
+    temps[3] = minute / 10 + '0';
+    temps[4] = minute % 10 + '0';
+    temps[5] = ':';
+    temps[6] = '0' + seconde / 10;
+    temps[7] =  '0' + seconde % 10;  
+    console_timer(temps, 8);
+
+    
+
 
 }

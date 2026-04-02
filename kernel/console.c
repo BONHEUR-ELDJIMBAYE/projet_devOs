@@ -3,8 +3,8 @@
 #include <inttypes.h>
 #include <stdio.h>
 #include <n7OS/timer.h>
-#define X0   1 //pour l'affichage de mon console, je comment à afficher à partir de la ligne 1 et colonne 1
-#define Y0   1
+#define X0   2 //pour l'affichage de mon console, je comment à afficher à partir de la ligne 1 et colonne 1
+#define Y0   2
 
 
 uint16_t *scr_tab;
@@ -24,6 +24,9 @@ void init_console() {
     cursor_y = Y0;
     clear_screen();
     console_cursor(cursor_x, cursor_y);
+    for (int i = 0; i < 80; i++) {
+        scr_tab[80 + i] = (CHAR_COLOR << 8) | '_';
+    }
 }
 
 void console_cursor(int x, int y) {
@@ -73,4 +76,14 @@ void console_putbytes(const char *s, int len) {
     for (int i= 0; i<len; i++) {
         console_putchar(s[i]);
     }
+}
+
+void console_timer(char tab[], int len) {
+    for (int i = 0; i < len; i++)
+    {
+        scr_tab[72 + i] = (CHAR_COLOR << 8) | tab[i];
+    }
+    
+    
+    
 }

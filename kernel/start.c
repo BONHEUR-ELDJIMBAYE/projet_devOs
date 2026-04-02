@@ -8,17 +8,14 @@
 
 extern void handler_IT50(void);
 
-int heure = 0;
-int minute = 0;
-int seconde = 0;
 
 void kernel_start(void)
 {
-    init_timer();
     init_console();
     init_kheap();
     initialise_paging();
-
+    init_timer();
+    
     
     //teste de la pagination
     // alloc_page_entry(0xA0000000,1,0); 

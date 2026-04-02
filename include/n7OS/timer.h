@@ -4,7 +4,7 @@
 
 #define F_OSC 0x1234BD
 #define HORLOGE 1000
-#define FREQUENCE F_OSC / HORLOGE
+#define FREQUENCE (F_OSC / HORLOGE)
 
 /**
  * @brief Initialise le timer
