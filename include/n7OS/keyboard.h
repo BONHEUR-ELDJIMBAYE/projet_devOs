@@ -46,6 +46,8 @@
 
 #define IS_KEY_RELEASED(key) (key & 0x80)
 
+#define KEYB_BUFFER_SIZE 255
+
 enum KEYCODE {
 // Alphanumeric keys ////////////////
 	KEY_SPACE             = ' ',

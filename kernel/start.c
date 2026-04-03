@@ -18,6 +18,8 @@ void kernel_start(void)
     init_timer();
     
     init_syscall();
+    init_keyboard();
+    
     printf("teste");
 
     //teste de la pagination
@@ -32,6 +34,8 @@ void kernel_start(void)
     
     // lancement des interruptions
     sti();
+    char c = kgetch();
+    printf("touche pressée : %c\n", c);
     // shutdown(1);
     
     // if ( exemple() == 1 ) {
@@ -40,6 +44,8 @@ void kernel_start(void)
 
     // on ne doit jamais sortir de kernel_start
     while (1) {
+        char c = kgetch();
+    printf("touche pressée : %c\n", c);
         // cette fonction arrete le processeur
         hlt();
     }

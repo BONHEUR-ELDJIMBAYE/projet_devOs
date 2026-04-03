@@ -22,7 +22,7 @@ type name(atype a) \
 { \
 type __res; \
 __asm__ volatile ("int $0x80" \
-	: "=a" (__res) \
+	: "=a" (__res) \																																																																																																																														
 	: "0" (NR_##name),"b" (a)); \
 	return __res; \
 }
