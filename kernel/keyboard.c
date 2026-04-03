@@ -25,15 +25,21 @@ void handler_keyboard() {
         //touche relachée, on ne fait rien
         
     } else {
-        //touche pressée
-        char c = scancode_map[code];
+        char c;
+        if(SHIFT_PRESSED == code){
+            uint16_t code_s = inb(KEYB_ENCODER);
+            c = scancode_map_shift[code_s];
+        } else {
+            c = scancode_map[code];
+        }
+        
         if ( c != 0) {
             keyboard_buffer[queue] = c;
             queue = (queue + 1) % KEYB_BUFFER_SIZE;
             
         }
     }
-    //ack de l’IT du PIC Master
+   
 }
 
 char kgetch() {

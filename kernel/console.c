@@ -49,10 +49,17 @@ void console_putchar(const char c) {
             cursor_x = X0;
             cursor_y++;
         }
-    } else if (c == 8) {// pour deplacer le curceur d'une colonne en arrière
-
-        if (cursor_x > X0) cursor_x--;
-    } else if (c == 9){ // ajouter un espace de 8 caractère
+    } else if (c == 8) { // backspace : effacer le caractère précédent et déplacer le curseur en arrière
+        if (cursor_x > X0) {
+            cursor_x--;
+        } else if (cursor_y > Y0) {
+            cursor_y--;
+            cursor_x = VGA_WIDTH - 1;
+        }
+        // Effacer le caractère à la position actuelle du curseur
+        int pos = cursor_y * VGA_WIDTH + cursor_x;
+        scr_tab[pos] = (CHAR_COLOR << 8) | ' ';
+    } else if (c == 9) { // tabulation : ajouter un espace de 8 caractères
 
         cursor_x += 8 - (cursor_x % 8);
     }else if (c == 10){ // déplace le curseur à la ligne suivante, colone 0
@@ -65,10 +72,11 @@ void console_putchar(const char c) {
         }
         cursor_x = X0;
         cursor_y = Y0;
-    }else if (c == 13){ // déplace le curseur à la conlonne 0 de la ligne courante
+    }else if (c == 13){ // déplace le curseur à la colonne 0 de la ligne courante
         cursor_x = X0;
+        cursor_y++;
     }
-    
+        
     console_cursor(cursor_x, cursor_y);
 }
 
