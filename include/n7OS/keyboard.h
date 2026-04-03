@@ -39,6 +39,8 @@
 // Special keys pressed and released
 #define SHIFT_PRESSED   0x2A
 #define SHIFT_RELEASED  0xAA
+#define CAPS_PRESSED    0x3A
+#define CAPS_RELEASED   0xBA
 #define CTRL_PRESSED    0x1D
 #define CTRL_RELEASED   0x9D
 #define ALT_PRESSED     0x38

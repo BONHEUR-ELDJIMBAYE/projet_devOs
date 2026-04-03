@@ -6,6 +6,7 @@ char keyboard_buffer[KEYB_BUFFER_SIZE];
 
 int queue = 0;
 int debut = 0;
+int shift_state = 0; // Variable globale pour suivre l'état du Shift
 
 void init_keyboard() {
     //demasquer le clavier
@@ -17,29 +18,34 @@ void init_keyboard() {
 }
 
 void handler_keyboard() {
-    //lire le code du clavier
-        outb(0x20, 0x20);
+    outb(0x20, 0x20);
 
     uint16_t code = inb(KEYB_ENCODER);
-    if ( IS_KEY_RELEASED(code)) {
-        //touche relachée, on ne fait rien
-        
-    } else {
-        char c;
-        if(SHIFT_PRESSED == code){
-            uint16_t code_s = inb(KEYB_ENCODER);
-            c = scancode_map_shift[code_s];
-        } else {
-            c = scancode_map[code];
-        }
-        
-        if ( c != 0) {
-            keyboard_buffer[queue] = c;
-            queue = (queue + 1) % KEYB_BUFFER_SIZE;
-            
-        }
+    
+    // Gérer le relâchement du Shift spécifiquement
+    if (code == SHIFT_RELEASED) {
+        shift_state = 0;
+        return;
     }
-   
+    
+    // Gérer les autres touches relâchées
+    if (IS_KEY_RELEASED(code)) {
+        return;
+    }
+    
+    // Gérer la pression du Shift
+    if (code == SHIFT_PRESSED) {
+        shift_state = 1;
+        return; // Ne pas ajouter Shift au buffer
+    }
+    
+    // Obtenir le caractère selon l'état du Shift
+    char c = shift_state ? scancode_map_shift[code] : scancode_map[code];
+    
+    if (c != 0) {
+        keyboard_buffer[queue] = c;
+        queue = (queue + 1) % KEYB_BUFFER_SIZE;
+    }
 }
 
 char kgetch() {
