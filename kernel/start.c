@@ -19,7 +19,7 @@ void kernel_start(void)
     
     init_syscall();
     init_keyboard();
-    
+    init_processus();
     
     //teste de la pagination
     // alloc_page_entry(0xA0000000,1,0); 

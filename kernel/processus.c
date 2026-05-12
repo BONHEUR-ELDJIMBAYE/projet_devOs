@@ -63,6 +63,7 @@ void terminate_process(process_pid_t pid){
     clear_pid(pid);
     free(process_table[pid].stack);
 }
+
 process_pid_t getpid(){
     for (int i = 0; i < NB_PROC; i++) {
         if (process_table[i].state == ELU) {
