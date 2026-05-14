@@ -39,12 +39,16 @@
 // Special keys pressed and released
 #define SHIFT_PRESSED   0x2A
 #define SHIFT_RELEASED  0xAA
+#define CAPS_PRESSED    0x3A
+#define CAPS_RELEASED   0xBA
 #define CTRL_PRESSED    0x1D
 #define CTRL_RELEASED   0x9D
 #define ALT_PRESSED     0x38
 #define ALT_RELEASED    0xB8
 
 #define IS_KEY_RELEASED(key) (key & 0x80)
+
+#define KEYB_BUFFER_SIZE 255
 
 enum KEYCODE {
 // Alphanumeric keys ////////////////

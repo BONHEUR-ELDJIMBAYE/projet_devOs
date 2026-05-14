@@ -47,4 +47,7 @@ void init_console();
  */
 void console_putbytes(const char *s, int len);
 
+
+void console_timer(char tab[], int len);
+
 #endif
