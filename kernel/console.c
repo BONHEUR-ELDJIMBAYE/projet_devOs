@@ -3,13 +3,12 @@
 #include <inttypes.h>
 #include <stdio.h>
 #include <n7OS/timer.h>
-#define X0   0 //pour l'affichage de mon console, je comment à afficher à partir de la ligne 1 et colonne 1
-#define Y0   2
+
 
 
 uint16_t *scr_tab;
-static int cursor_x = 0;
-static int cursor_y = 0;
+static int cursor_x = X0;
+static int cursor_y = Y0;
 
 
 

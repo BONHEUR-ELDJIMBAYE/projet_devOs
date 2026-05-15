@@ -24,7 +24,6 @@ void handler_timer() {
     timer_counter++;
     if (timer_counter % 1000 == 0) {
         display_time();
-        scheduler();
     }
 
 }

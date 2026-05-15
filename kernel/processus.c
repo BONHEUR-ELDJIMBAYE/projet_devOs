@@ -2,22 +2,22 @@
 #include <stddef.h>
 
 
-uint32_t process_table_bitmap[NB_PROC / 32];
-process_t process_table[NB_PROC];
+uint32_t process_table_bitmap[NB_PROC / 32];// bitmap pour suivre les PID utilisés (1 = utilisé, 0 = libre)
+process_t process_table[NB_PROC]; // table des processus
+int nbre_process_pret = 0; //nombre effectif de processus prêts à être exécutés
+process_pid_t* table_process_pret[NB_PROC];//tableau des pointeurs vers les processus prêts à être exécutés
 
 extern void idle();
+extern void processus1();
+extern void processus2();
+extern void processus3();
+extern void ctx_sw(uint32_t *ancien, uint32_t *elu);
 
-void init_processus(){
-    for (int i = 0; i < NB_PROC / 32; i++) {
-        process_table_bitmap[i] = 0;
-    }
-    fork("idle", *idle); // processus idle pour éviter les problèmes de scheduler, prend le pid 0
-}
 
 process_pid_t find_free_pid(){
     for (uint32_t process_idx = 0x0; process_idx < NB_PROC; process_idx++)
 	{
-		uint32_t index = process_idx / 32;
+        uint32_t index = process_idx / 32;
 		uint32_t offset = process_idx % 32;
 
 		if (!(process_table_bitmap[index] & (1 << offset)))
@@ -107,9 +107,7 @@ void start_process(process_pid_t pid){
     if (pid < 0 || pid >= NB_PROC) {
         return; // pid invalide
     }
-    if (pid == 0) {
-        return; // ne pas arrêter le processus idle
-    }
+   
     process_table[pid].state = ELU;
 }
 
@@ -129,11 +127,11 @@ void scheduler(){
         elu = &process_table[0];  // idle est toujours pid 0
     }
 
+    // printf("processus %s (pid %d) élu\n", elu->nom, elu->pid);
     // si c'est déjà le même → rien à faire
     if (elu == processus_actif) {
         return;
     }
-
     // transition des états
     process_t *ancien  = processus_actif;
     ancien->state      = PRET;
@@ -142,4 +140,23 @@ void scheduler(){
 
     //changement de contexte entre le processus actif et le processus élu
     ctx_sw(ancien->regs, elu->regs);
+}
+
+// void afficher_table_processus() {
+//     printf("PID\tETAT\tNOM\n");
+//     for (int i = 0; i < NB_PROC; i++) {
+//         if (process_table_bitmap[i / 32] & (1 << (i % 32))) {
+//             printf("%d\t%d\t%s\n", process_table[i].pid, process_table[i].state, process_table[i].nom);
+//         }
+//     }
+// }
+void init_processus(){
+    for (int i = 0; i < NB_PROC / 32; i++) {
+        process_table_bitmap[i] = 0;
+    }
+    fork("idle", *idle); // processus idle pour éviter les problèmes de scheduler, prend le pid 0
+    start_process(0); // on démarre le processus idle
+    fork("processus1", *processus1);
+    fork("processus2", *processus2);
+    fork("processus3", *processus3);
 }
