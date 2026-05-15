@@ -6,6 +6,7 @@
 #include <n7OS/irq.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <n7OS/processus.h>
 
 extern void handler_IT50(void);
 extern void idle();
@@ -34,18 +35,17 @@ void kernel_start(void)
     // lancement des interruptions
     sti();
     
-    // shutdown(1);
+    //shutdown(1);
     
     // if ( exemple() == 1 ) {
     //     printf("exemple ok");
     // }
-
     // on ne doit jamais sortir de kernel_start
-    // idle();
-    while (1) {
-        char c = kgetch();
-        console_putchar(c);
-        // cette fonction arrete le processeur
-        hlt();
-    }
+    idle();
+    // while (1) {
+    //     char c = kgetch();
+    //     console_putchar(c);
+    //     // cette fonction arrete le processeur
+    //     hlt();
+    // }
 }

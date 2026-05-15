@@ -2,7 +2,6 @@
 #include <n7OS/cpu.h>
 #include <inttypes.h>
 #include <stdio.h>
-#include <n7OS/timer.h>
 
 
 

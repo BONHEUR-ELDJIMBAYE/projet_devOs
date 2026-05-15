@@ -4,9 +4,9 @@
 
 void idle(){
     process_pid_t pid = getpid();
-    printf("idle. PID: %d\n", pid);
     
-    scheduler();
+    // scheduler();
+    printf("idle. PID: %d\n", pid);
     while (1) {
         hlt();
     }
