@@ -8,7 +8,7 @@
 #include <unistd.h>
 
 extern void handler_IT50(void);
-
+extern void idle();
 
 void kernel_start(void)
 {
@@ -41,6 +41,7 @@ void kernel_start(void)
     // }
 
     // on ne doit jamais sortir de kernel_start
+    // idle();
     while (1) {
         char c = kgetch();
         console_putchar(c);

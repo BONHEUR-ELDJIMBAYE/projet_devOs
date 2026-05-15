@@ -1,6 +1,9 @@
 #include <stdio.h>
+#include <n7OS/processus.h>
 
 void processus1() {
-  printf("Hello, world from P1\n");
-  for (;;);
+    process_pid_t pid = getpid();
+    printf("Hello, world from P1. PID: %d\n", pid);
+    scheduler();
+    for (;;);
 }
