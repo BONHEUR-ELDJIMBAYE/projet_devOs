@@ -10,6 +10,7 @@
 
 extern void handler_IT50(void);
 extern void idle();
+extern void shell_run();
 
 void kernel_start(void)
 {
@@ -40,12 +41,7 @@ void kernel_start(void)
     // if ( exemple() == 1 ) {
     //     printf("exemple ok");
     // }
+    fork("shell", *shell_run);
     // on ne doit jamais sortir de kernel_start
     idle();
-    // while (1) {
-    //     char c = kgetch();
-    //     console_putchar(c);
-    //     // cette fonction arrete le processeur
-    //     hlt();
-    // }
 }

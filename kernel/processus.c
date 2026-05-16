@@ -5,9 +5,7 @@
 
 uint32_t process_table_bitmap[NB_PROC / 32];// bitmap pour suivre les PID utilisés (1 = utilisé, 0 = libre)
 process_t process_table[NB_PROC]; // table des processus
-int index_table_process_pret = 0;
-int nbre_process_pret = 0; //nombre de processus prêts à être exécutés
-process_t* table_process_pret[NB_PROC];//tableau des pointeurs vers les processus prêts à être exécutés
+bool running = false; // determine si le processeur est en train d'executer un processus
 
 extern void idle();
 extern void processus1();
@@ -52,9 +50,37 @@ process_pid_t fork(const char *name, fnptr function){
     }
     process_table[pid].stack[STACK_SIZE - 1] = (uint32_t)function;
     process_table[pid].regs[1] = (uint32_t)&process_table[pid].stack[STACK_SIZE - 1];
-    table_process_pret[nbre_process_pret] = &process_table[pid];
-    nbre_process_pret++;
     return pid;
+}
+
+bool is_Process(process_pid_t pid){
+    if (pid < 0 || pid >= NB_PROC) {
+        return false;
+    }
+    uint32_t index = pid / 32;
+    uint32_t offset = pid % 32;
+    return process_table_bitmap[index] & (1 << offset);
+}
+
+bool is_process_ELU(process_pid_t pid){
+    if (!is_Process(pid)) {
+        return false;   
+    }
+    return process_table[pid].state == ELU;
+}
+
+bool is_process_BLOQUE(process_pid_t pid){
+    if (!is_Process(pid)) {
+        return false;
+    }
+    return process_table[pid].state == BLOQUE;
+}
+
+bool is_process_PRET(process_pid_t pid){
+    if (!is_Process(pid)) {
+        return false;
+    }
+    return process_table[pid].state == PRET;
 }
 
 void terminate_process(process_pid_t pid){
@@ -84,7 +110,10 @@ void block_process(process_pid_t pid){
     if (pid == 0) {
         return; // ne pas arrêter le processus idle
     }
-    process_table[pid].state = BLOQUE;
+    if (is_Process(pid)) {
+        process_table[pid].state = BLOQUE; 
+ 
+    }
 }
 
 void unblock_process(process_pid_t pid){
@@ -94,71 +123,49 @@ void unblock_process(process_pid_t pid){
     if (pid == 0) {
         return; // ne pas arrêter le processus idle
     }
-    process_table[pid].state = PRET;
+    if (is_Process(pid) && is_process_BLOQUE(pid)) {
+        process_table[pid].state =PRET;    
+    }
 }
 
-void stop_process(process_pid_t pid){
+void interrupt_process(process_pid_t pid){
     if (pid < 0 || pid >= NB_PROC) {
         return; // pid invalide
     }
     if (pid == 0) {
         return; // ne pas arrêter le processus idle
     }
-    process_table[pid].state = PRET;
+    if (is_Process(pid) && is_process_ELU(pid)) {
+        scheduler();
+    }    
 }
 
 void start_process(process_pid_t pid){
     if (pid < 0 || pid >= NB_PROC) {
         return; // pid invalide
     }
-   
-    process_table[pid].state = ELU;
+    if(is_Process(pid) && is_process_PRET(pid) && !running){
+        process_table[pid].state = ELU;
+        running = true;
+    }
 }
+
 
 void scheduler(){
-    // process_pid_t current_pid = getpid();
-    // process_t *processus_actif = &process_table[current_pid];
-    // process_t *elu = NULL;
-
-    // for (int i = 0; i < NB_PROC; i++) {
-    //     if (process_table[i].state == PRET) {
-    //         elu = &process_table[i];
-    //         break;
-    //     }
-    // }
-
-    // if (elu == NULL) {
-    //     elu = &process_table[0];  // idle est toujours pid 0
-    // }
-
-    // // printf("processus %s (pid %d) élu\n", elu->nom, elu->pid);
-    // // si c'est déjà le même → rien à faire
-    // if (elu == processus_actif) {
-    //     return;
-    // }
-    // // transition des états
-    // process_t *ancien  = processus_actif;
-    // ancien->state      = PRET;
-    // elu->state         = ELU;
-    index_table_process_pret = (index_table_process_pret + 1) % nbre_process_pret;
-    process_pid_t pid = getpid();
-    process_t *processus_actif = &process_table[pid];
-    process_t *processus_elu = table_process_pret[index_table_process_pret];
-    processus_actif->state = PRET;
-    processus_elu->state = ELU;
-    sti();
-    //changement de contexte entre le processus actif et le processus élu
-    ctx_sw(processus_actif->regs, processus_elu->regs);
+    process_pid_t current_pid = getpid();
+    for (int i = 0; i < NB_PROC; i++){
+        process_pid_t new_pid = (current_pid + i) % NB_PROC;
+        if (is_process_PRET(new_pid)) {
+            process_table[current_pid].state =PRET;
+            process_table[new_pid].state = ELU;
+            sti();
+            ctx_sw(process_table[current_pid].regs, process_table[new_pid].regs);
+            return;
+        }
+    }
 }
 
-// void afficher_table_processus() {
-//     printf("PID\tETAT\tNOM\n");
-//     for (int i = 0; i < NB_PROC; i++) {
-//         if (process_table_bitmap[i / 32] & (1 << (i % 32))) {
-//             printf("%d\t%d\t%s\n", process_table[i].pid, process_table[i].state, process_table[i].nom);
-//         }
-//     }
-// }
+
 void init_processus(){
     for (int i = 0; i < NB_PROC / 32; i++) {
         process_table_bitmap[i] = 0;
@@ -168,4 +175,32 @@ void init_processus(){
     fork("processus1", *processus1);
     fork("processus2", *processus2);
     fork("processus3", *processus3);
+}
+
+
+void ps() {
+    printf("%-5s | %-15s | %-10s\n", "PID", "NOM", "ETAT");
+    printf("------------------------------\n");
+    
+    for(int i = 0; i < NB_PROC; i++) {
+        if(is_Process(i)) {
+            printf("%-5d | %-15s | ",process_table[i].pid,process_table[i].nom);
+            switch (process_table[i].state)
+			{
+			case PRET:
+				printf("%-8s\n", "PRET");
+				break;
+			case ELU:
+				printf("%-8s\n", "ELU");
+				break;
+			case BLOQUE:
+				printf("%-8s\n", "BLOQUE");
+				break;
+			default:
+				printf("%-8s\n", "UNKNOWN");
+				break;
+			}
+        }
+    }
+    printf("------------------------------\n");
 }

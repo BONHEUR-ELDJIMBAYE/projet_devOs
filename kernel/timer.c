@@ -24,8 +24,8 @@ void handler_timer() {
     timer_counter++;
     if (timer_counter % 1000 == 0) {
         display_time();
-        scheduler();
     }
+    scheduler();
 }
 
 void convert_counter_to_time(int *hours, int *minutes, int *seconds) {

@@ -48,6 +48,35 @@ process_pid_t find_free_pid();
  */
 void clear_pid(process_pid_t pid);
 
+/**
+ * @brief Vérifie si un processus existe
+ * @param pid identifiant du processus à vérifier
+ * @return true si le processus existe, false sinon
+ */
+bool is_Process(process_pid_t pid);
+
+
+/**
+ * @brief Vérifie si un processus est élu
+ * @param pid identifiant du processus à vérifier
+ * @return true si le processus est élu, false sinon
+ */
+bool is_process_ELU(process_pid_t pid);
+
+/**
+ * @brief Vérifie si un processus est bloqué
+ * @param pid identifiant du processus à vérifier
+ * @return true si le processus est bloqué, false sinon
+ */
+bool is_process_BLOQUE(process_pid_t pid);
+
+/**
+ * @brief Vérifie si un processus est prêt
+ * @param pid identifiant du processus à vérifier
+ * @return true si le processus est prêt, false sinon
+ */
+bool is_process_PRET(process_pid_t pid);
+
 /** @brief Termine le processus courant
  *  @return 0 en cas de succès, -1 en cas d'erreur
  */
@@ -76,25 +105,29 @@ int sleep(int seconds);
  */
 void terminate_process(process_pid_t pid);
 
-/** @brief Arrête un processus donné
- * @param pid identifiant du processus à arrêter
+/** @brief bloquer un processus donné
+ * le processus bloqué sera retirer de la table des processus prêts
+ * @param pid identifiant du processus à bloquer
  */
 void block_process(process_pid_t pid);
 
-/** @brief Arrête un processus donné
+/** @brief suspendre un processus en cours d'execution
  * @param pid identifiant du processus à arrêter
  */
-void stop_process(process_pid_t pid);
+void interrupt_process(process_pid_t pid);
 
 /** @brief Débloque un processus donné
+ * le processus débloqué sera ajouter à la table des processus prêts
  * @param pid identifiant du processus à débloquer
  */
 void unblock_process(process_pid_t pid);
+
 
 /** @brief Démarre un processus donné
  * @param pid identifiant du processus à démarquer
  */
 void start_process(process_pid_t pid);
+
 /** @brief Planifie l'exécution des processus
  *  @return 0 en cas de succès, -1 en cas d'erreur
  */
@@ -104,5 +137,11 @@ void scheduler();
  *  @return 0 en cas de succès, -1 en cas d'erreur
  */
 void init_processus();
+
+
+/**
+ * @brief Affiche la table des processus
+ */
+void ps();
 
 #endif // _PROCESSUS_H

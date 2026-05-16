@@ -38,7 +38,7 @@
 #define BACK    (BLACK<<4)
 #define TEXT    GREEN 
 #define CHAR_COLOR (BLINK|BACK|TEXT)
-#define X0   0 //pour l'affichage de mon console, je comment à afficher à partir de la ligne 1 et colonne 1
+#define X0   0 //pour l'affichage de mon console, je comment à afficher à partir de la ligne 2 et colonne 0
 #define Y0   2
 
 void init_console();

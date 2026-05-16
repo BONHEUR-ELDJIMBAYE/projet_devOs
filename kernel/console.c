@@ -11,16 +11,24 @@ static int cursor_y = Y0;
 
 
 
-void clear_screen() { //pour effacer ce qui s'affiche par defaut sur l'ecran
-    for (int i = 0; i < VGA_WIDTH * VGA_HEIGHT; i++) {
-            scr_tab[i] = (CHAR_COLOR << 8) | ' ';
+void clear_screen() { 
+    for (int i =Y0; i < VGA_HEIGHT; i++) {
+        for (int j = X0; j < VGA_WIDTH; j++) {
+            scr_tab[i * VGA_WIDTH + j] = (CHAR_COLOR << 8) | ' ';
         }
+    }
+    cursor_x = X0;
+    cursor_y = Y0;
+    console_cursor(X0, Y0);
 }
 void init_console() {
     scr_tab= (uint16_t *) SCREEN_ADDR;
     cursor_x = X0;
     cursor_y = Y0;
-    clear_screen();
+    //pour effacer ce qui s'affiche par defaut sur l'ecran
+    for (int i = 0; i < VGA_WIDTH * VGA_HEIGHT; i++) {
+        scr_tab[i] = (CHAR_COLOR << 8) | ' ';
+    }
     console_cursor(cursor_x, cursor_y);
     for (int i = 0; i < 80; i++) {
         scr_tab[80 + i] = (CHAR_COLOR << 8) | '_';
