@@ -3,10 +3,10 @@
 #include <n7OS/processus.h>
 
 void idle(){
-    process_pid_t pid = getpid();
+    // process_pid_t pid = getpid();
     
     // scheduler();
-    printf("idle. PID: %d\n", pid);
+    // printf("idle. PID: %d\n", pid);
     while (1) {
         hlt();
     }

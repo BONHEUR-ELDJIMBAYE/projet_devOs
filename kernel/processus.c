@@ -44,6 +44,7 @@ process_pid_t fork(const char *name, fnptr function){
     process_table[pid].pid = pid;
     process_table[pid].state = PRET;
     process_table[pid].nom = name;
+    process_table[pid].parent = getpid();//le père du processus est le processus courant
     process_table[pid].stack = (uint32_t *)malloc(sizeof(uint32_t) * STACK_SIZE);
     for (int i = 0; i < 5; i++) {
         process_table[pid].regs[i] = 0;
@@ -51,6 +52,10 @@ process_pid_t fork(const char *name, fnptr function){
     process_table[pid].stack[STACK_SIZE - 1] = (uint32_t)function;
     process_table[pid].regs[1] = (uint32_t)&process_table[pid].stack[STACK_SIZE - 1];
     return pid;
+}
+
+process_pid_t getppid(){
+    return process_table[getpid()].parent;
 }
 
 bool is_Process(process_pid_t pid){
@@ -90,8 +95,12 @@ void terminate_process(process_pid_t pid){
     if (pid == 0) {
         return; // ne pas terminer le processus idle
     }
+    if (is_process_ELU(pid)) {
+        scheduler();
+    }
     clear_pid(pid);
     free(process_table[pid].stack);
+    ps();
 }
 
 process_pid_t getpid(){
