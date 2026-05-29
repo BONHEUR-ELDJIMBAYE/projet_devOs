@@ -41,7 +41,7 @@ void kernel_start(void)
     // if ( exemple() == 1 ) {
     //     printf("exemple ok");
     // }
-    fork("shell", *shell_run);
+    kernel_fork("shell", *shell_run);
     // on ne doit jamais sortir de kernel_start
     idle();
 }

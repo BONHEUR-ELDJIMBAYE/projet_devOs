@@ -13,7 +13,7 @@
 #define NB_PROC 255 // nombre maximum de processus
 #define STACK_SIZE PAGE_SIZE // taille de la pile pour chaque processus   
 
-typedef enum{ELU, PRET, BLOQUE} PROCESS_STATE; // état d'un processus
+typedef enum{ELU, PRET, BLOQUE, TERMINE, ENDORMI} PROCESS_STATE; // état d'un processus
 
 typedef uint32_t process_pid_t;
 typedef struct {
@@ -21,6 +21,7 @@ typedef struct {
     PROCESS_STATE state; // état du processus
     process_pid_t parent; // identifiant du processus parent
     char* nom; // nom du processus
+    uint32_t wake_up_time; // heure de reveil (en ms)
     uint32_t *stack; // pile d'exécution du processus
     uint32_t regs[5]; // registres du processus ([0]=ebx [1]=esp [2]=ebp [3]=esi [4]=edi)
 } process_t;
@@ -34,7 +35,7 @@ typedef void* (*fnptr)();
  *  @param function fonction à exécuter
  *  @return identifiant du processus créé
  */
-process_pid_t fork(const char *name, fnptr function);
+process_pid_t kernel_fork(const char *name, fnptr function);
 
 /**
  * @brief Trouve un identifiant de processus libre
@@ -46,7 +47,7 @@ process_pid_t find_free_pid();
  * @brief Récupère l'identifiant du processus parent
  * @return identifiant du processus parent
  */
-process_pid_t getppid();
+process_pid_t kernel_getppid();
 
 /**
  * @brief Libère un identifiant de processus
@@ -86,12 +87,12 @@ bool is_process_PRET(process_pid_t pid);
 /** @brief Termine le processus courant
  *  @return 0 en cas de succès, -1 en cas d'erreur
  */
-int exit();
+int kernel_exit();
 
 /** @brief Récupère l'identifiant du processus courant
  *  @return identifiant du processus courant
  */
-process_pid_t getpid();
+process_pid_t kernel_getpid();
 
 
 /**
@@ -99,6 +100,8 @@ process_pid_t getpid();
  * @param pid identifiant du processus à terminer
  */
 void terminate_process(process_pid_t pid);
+
+int kernel_kill(process_pid_t pid);
 
 /** @brief bloquer un processus donné
  * le processus bloqué sera retirer de la table des processus prêts
@@ -117,6 +120,17 @@ void interrupt_process(process_pid_t pid);
  */
 void unblock_process(process_pid_t pid);
 
+/** @brief Attend la fin d'un processus
+ * @param pid identifiant du processus à attendre
+ * @return 0 en cas de succès, -1 en cas d'erreur
+ */
+int kernel_wait(process_pid_t pid);
+
+/** @brief Endort le processus courant pendant un certain nombre de secondes
+ * @param seconds temps en secondes
+ * @return 0 en cas de succès
+ */
+int kernel_sleep(int seconds);
 
 /** @brief Démarre un processus donné
  * @param pid identifiant du processus à démarquer
@@ -137,6 +151,9 @@ void init_processus();
 /**
  * @brief Affiche la table des processus
  */
-void ps();
+void kernel_ps();
+
+// Variable globale pour activer/desactiver l'affichage des processus de test
+extern int display_process_test;
 
 #endif // _PROCESSUS_H
